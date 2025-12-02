@@ -5,8 +5,7 @@ const bool VERBOSE = false;
 // https://github.com/zeux/meshoptimizer
 #import "meshoptimizer.h"
 
-bool isSameClassName(id a, NSString *b) { return (a&&[[a className] compare:b]==NSOrderedSame); }
-bool isNumber(id a) { return isSameClassName(a,@"__NSCFNumber"); }
+#import "TypeCheck.h"
 
 extern "C" void meshopt(std::vector<simd::float3> &v, std::vector<simd::uint3> &f, NSString *params) {
     
@@ -38,7 +37,7 @@ extern "C" void meshopt(std::vector<simd::float3> &v, std::vector<simd::uint3> &
     NSMutableDictionary *settings = [[NSMutableDictionary alloc] init];
     if(params) {
         settings = [NSJSONSerialization JSONObjectWithData:[[[NSRegularExpression regularExpressionWithPattern:@"(/\\*[\\s\\S]*?\\*/|//.*)" options:1 error:nil] stringByReplacingMatchesInString:params options:0 range:NSMakeRange(0,params.length) withTemplate:@""] dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
-        if(isNumber(settings[@"si"])) si = [settings[@"si"] floatValue];
+        if(TypeCheck::isNumber(settings[@"si"])) si = [settings[@"si"] floatValue];
     }
         
     size_t result_index_count = meshopt_simplify(result_indices,indices,index_count,attr,attr_count,attr_stride*sizeof(float),index_count*si,target_error,0,&result_error);
