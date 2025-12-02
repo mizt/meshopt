@@ -1,7 +1,6 @@
-#import <CoreFoundation/CoreFoundation.h>
+#import <Foundation/Foundation.h>
+#import <simd/simd.h>
 #import <vector>
-
-extern "C" {
-    void meshopt(std::vector<float> *v, std::vector<unsigned int> *f, NSString *params);
-}
+    
+extern "C" void meshopt(std::vector<simd::float3> &v, std::vector<simd::uint3> &f, NSString *params);
     
